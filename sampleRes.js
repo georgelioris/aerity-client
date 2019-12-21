@@ -10,7 +10,7 @@ const sampleRes = {
     precipProbability: 0.03,
     precipType: 'rain',
     temperature: 9.2,
-    apparentTemperature: 9.2,
+    apparentTemperature: 8.2,
     dewPoint: 3.11,
     humidity: 0.66,
     pressure: 1030.4,
