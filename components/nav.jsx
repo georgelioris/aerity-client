@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box, Header, Heading } from 'grommet';
 import Link from 'next/link';
 
 const links = [
@@ -7,49 +8,11 @@ const links = [
 ].map(link => ({ ...link, key: `nav-link-${link.href}-${link.label}` }));
 
 const Nav = () => (
-  <nav>
-    <ul>
-      <li>
-        <Link href="/">
-          <span>Home</span>
-        </Link>
-      </li>
-      {links.map(({ key, href, label }) => (
-        <li key={key}>
-          <a href={href}>{label}</a>
-        </li>
-      ))}
-    </ul>
-
-    <style jsx>
-      {`
-        :global(body) {
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir,
-            Helvetica, sans-serif;
-        }
-        nav {
-          text-align: center;
-        }
-        ul {
-          display: flex;
-          justify-content: space-between;
-        }
-        nav > ul {
-          padding: 4px 16px;
-        }
-        li {
-          display: flex;
-          padding: 6px 8px;
-        }
-        a {
-          color: #067df7;
-          text-decoration: none;
-          font-size: 13px;
-        }
-      `}
-    </style>
-  </nav>
+  <Header background="brand" alignSelf="start" justify="center">
+    <Box basis="2/3" animation="fadeIn">
+      <Heading size="small">Aerity</Heading>
+    </Box>
+  </Header>
 );
 
 export default Nav;
