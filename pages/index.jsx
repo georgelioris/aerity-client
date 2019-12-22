@@ -11,7 +11,7 @@ import { setLoading, setError, setLocation, setwData } from '../lib/actions';
 import { initState, formatUrl, formatQuery } from '../lib/helpers';
 import reducer from '../lib/reducer';
 import fetchData from '../lib/fetchData';
-import sampleFetch from '../lib/mochFetch';
+import mockFetch from '../lib/mockFetch';
 import sampleRes from '../sampleRes';
 
 function App() {
@@ -54,7 +54,7 @@ function App() {
     dispatch(setLoading(true));
     if (state.geoLoc) {
       try {
-        const result = await sampleFetch(sampleRes);
+        const result = await mockFetch(sampleRes);
         dispatch(setwData(result));
       } catch (error) {
         dispatch(setError({ status: true, message: 'Connection Error' }));
