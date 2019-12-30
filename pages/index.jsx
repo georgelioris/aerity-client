@@ -118,11 +118,4 @@ function App() {
     </Grommet>
   );
 }
-// App.defaultProps = {
-//  isLoading: initState.isLoading,
-//  isError: initState.isError,
-//  geoLoc: initState.geoLoc,
-//  wData: initState.wData,
-//  errMessage: initState.errMessage
-// };
 export default App;
