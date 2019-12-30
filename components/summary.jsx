@@ -31,8 +31,8 @@ const Summary = ({ wData }) => {
           {Math.floor(currently.temperature) !==
             Math.floor(currently.apparentTemperature) && (
             <span>
-              {`Feels like 
-								${Math.floor(currently.apparentTemperature)}°`}
+              {`Feels like
+                ${Math.floor(currently.apparentTemperature)}°`}
             </span>
           )}
         </Box>
