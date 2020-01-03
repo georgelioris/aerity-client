@@ -12,6 +12,7 @@ const Summary = ({ wData }) => {
         direction="row"
         justify="between"
         alignContent="between"
+        animation="fadeIn"
       >
         <Box direction="column">
           <Heading level="4" color="accent-2" margin="none">
@@ -37,7 +38,7 @@ const Summary = ({ wData }) => {
           )}
         </Box>
       </Box>
-      <Box direction="column" align="center">
+      <Box direction="column" align="center" animation="slideDown">
         <Box style={{ width: 'auto' }}>
           <ReactAnimatedWeather
             icon={formatIcon(currently.icon)}

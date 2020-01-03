@@ -76,7 +76,7 @@ function App() {
   return (
     <Grommet theme={MyTheme}>
       <Nav />
-      <Main margin={{ top: 'large' }}>
+      <Main margin={{ top: 'large' }} animation="fadeIn">
         <Box
           align="center"
           style={{
@@ -97,7 +97,7 @@ function App() {
               alignSelf="center"
               primary
               onClick={() => {
-                mockOperation();
+                operation();
                 buttonRef.current.blur();
               }}
             />
