@@ -28,6 +28,7 @@ function App() {
       )
     );
   }, []);
+
   async function operation() {
     const appId = Cookies.get('appId');
     dispatch(setError({ status: false }));
@@ -63,7 +64,7 @@ function App() {
         dispatch(setLoading(false));
       }
     } else if (!state.geoLoc) {
-      dispatch(setError({ status: true, message: 'Location Error' }));
+      dispatch(setError({ status: true, message: 'Location Provider Error' }));
       dispatch(setLoading(false));
     }
   }
@@ -97,7 +98,7 @@ function App() {
               alignSelf="center"
               primary
               onClick={() => {
-                operation();
+                mockOperation();
                 buttonRef.current.blur();
               }}
             />
