@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Heading } from 'grommet';
 import ReactAnimatedWeather from 'react-animated-weather';

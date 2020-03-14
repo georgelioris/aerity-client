@@ -3,16 +3,17 @@ import { Button, Main, Grommet, Box } from 'grommet';
 import { Refresh } from 'grommet-icons';
 import Cookies from 'js-cookie';
 import cuid from 'cuid';
-import Nav from '../components/nav';
-import Spinner from '../components/spinner';
-import Summary from '../components/summary';
-import MyTheme from '../lib/MyTheme.json';
-import { setLoading, setError, setLocation, setwData } from '../lib/actions';
-import { initState, formatUrl, formatQuery } from '../lib/helpers';
-import reducer from '../lib/reducer';
-import fetchData from '../lib/fetchData';
-import mockFetch from '../lib/mockFetch';
-import sampleRes from '../sampleRes';
+import Nav from './components/nav';
+import Spinner from './components/spinner';
+import Summary from './components/summary';
+import MyTheme from './lib/MyTheme.json';
+import { setLoading, setError, setLocation, setwData } from './lib/actions';
+import { initState, formatUrl, formatQuery } from './lib/helpers';
+import reducer from './lib/reducer';
+import fetchData from './lib/fetchData';
+import mockFetch from './lib/mockFetch';
+import sampleRes from './sampleRes';
+import './App.css';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initState);
