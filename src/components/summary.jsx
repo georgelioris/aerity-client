@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Box, Heading } from 'grommet';
 import ReactAnimatedWeather from 'react-animated-weather';
 import { formatIcon, parseDate, parseTemp } from '../lib/helpers';
+import Daily from './daily';
 
 const Summary = ({ wData }) => {
   const { currently, timezone, flags } = wData;
@@ -17,10 +18,10 @@ const Summary = ({ wData }) => {
       >
         <Box direction="column">
           <Heading level="4" color="accent-2" margin="none">
-            {timezone}
+            {parseDate(currently.time)}
           </Heading>
           <Heading level="3" margin="none">
-            {parseDate(currently.time)}
+            {timezone}
           </Heading>
         </Box>
         <Box direction="column">
@@ -30,11 +31,11 @@ const Summary = ({ wData }) => {
           <Heading level="3" margin="none">
             {parseTemp(currently.temperature, flags.units)}
           </Heading>
-          {Math.floor(currently.temperature) !==
-            Math.floor(currently.apparentTemperature) && (
+          {Math.round(currently.temperature) !==
+            Math.round(currently.apparentTemperature) && (
             <span>
               {`Feels like
-                ${Math.floor(currently.apparentTemperature)}°`}
+                ${Math.round(currently.apparentTemperature)}°`}
             </span>
           )}
         </Box>
@@ -50,6 +51,7 @@ const Summary = ({ wData }) => {
         </Box>
         <Heading level="4">{wData.currently.summary}</Heading>
       </Box>
+      <Daily daily={wData.daily} />
     </>
   );
 };
