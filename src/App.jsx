@@ -20,11 +20,19 @@ function App() {
   useEffect(() => {
     async function operation() {
       const appId = Cookies.get('appId');
+      const localData = JSON.parse(localStorage.getItem('cached'));
       dispatch(setError({ status: false }));
       dispatch(setLoading(true));
 
-      const localData = JSON.parse(localStorage.getItem('cached'));
-      if (state.geoLoc && localData && isExpired(localData.ts)) {
+      if (!state.geoLoc) {
+        dispatch(setError({ status: true, message: 'Location Error' }));
+        dispatch(setLoading(false));
+      } else if (localData && !isExpired(localData.ts)) {
+        dispatch(setwData(JSON.parse(localData.data)));
+        dispatch(setError({ status: false }));
+        dispatch(setLoading(false));
+        // console.log('using cache');
+      } else {
         const url = formatUrl(formatQuery(state.geoLoc));
         try {
           const result = await fetchData(url, { params: { APPID: appId } });
@@ -43,23 +51,15 @@ function App() {
         } finally {
           dispatch(setLoading(false));
         }
-      } else if (!state.geoLoc) {
-        dispatch(setError({ status: true, message: 'Location Error' }));
-        dispatch(setLoading(false));
-      } else if (localData && !isExpired(localData.ts)) {
-        dispatch(setwData(JSON.parse(localData.data)));
-        dispatch(setError({ status: false }));
-        dispatch(setLoading(false));
-        // console.log('using cache');
       }
     }
-    if (!Cookies.get('appId')) {
-      Cookies.set('appId', cuid());
-    }
+
     operation();
   }, [state.geoLoc]);
 
   useEffect(() => {
+    if (!Cookies.get('appId')) Cookies.set('appId', cuid());
+
     navigator.geolocation.getCurrentPosition(pos =>
       dispatch(
         setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude })
