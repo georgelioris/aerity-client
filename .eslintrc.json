@@ -11,8 +11,7 @@
   ],
   "plugins": ["react-hooks", "prettier", "react"],
   "rules": {
-    "react/react-in-jsx-scope": "off",
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
     "no-unused-vars": "warn",
     "no-console": "warn"
   }
