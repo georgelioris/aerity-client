@@ -6,7 +6,7 @@ const Nav = () => (
     background="brand"
     width="xlarge"
     justify="start"
-    margin={{ left: 'large' }}
+    pad={{ left: 'large' }}
     alignSelf="center"
   >
     <Box justify="start" animation="fadeIn">

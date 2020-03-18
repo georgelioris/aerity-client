@@ -72,7 +72,11 @@ function App() {
 
   return (
     <Grommet theme={MyTheme}>
-      <Box style={{ minHeight: '100vh' }} width="100%">
+      <Box
+        style={{ minHeight: '90vh' }}
+        pad={{ botton: 'xsmall' }}
+        width="100%"
+      >
         <Nav />
         <Main margin={{ top: 'large' }} animation="fadeIn">
           <Box
@@ -89,15 +93,7 @@ function App() {
           </Box>
         </Main>
       </Box>
-      <Footer
-        justify="center"
-        height="xsmall"
-        width="100%"
-        style={{
-          position: 'absolute',
-          bottom: '0'
-        }}
-      >
+      <Footer justify="center" height="xsmall" pad="small">
         <Anchor
           color="dark-3"
           size="small"
