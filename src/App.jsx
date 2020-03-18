@@ -72,13 +72,9 @@ function App() {
 
   return (
     <Grommet theme={MyTheme}>
-      <Box
-        style={{ minHeight: '90vh' }}
-        pad={{ botton: 'xsmall' }}
-        width="100%"
-      >
+      <Box style={{ minHeight: '95vh' }} pad={{ botton: 'small' }} width="100%">
         <Nav />
-        <Main margin={{ top: 'large' }} animation="fadeIn">
+        <Main pad={{ bottom: 'xlarge' }} animation="fadeIn">
           <Box
             align="center"
             style={{
@@ -93,22 +89,25 @@ function App() {
           </Box>
         </Main>
       </Box>
-      <Footer justify="center" height="xsmall" pad="small">
+      <Footer justify="center" alignContent="center" height="5vh" pad="small">
         <Anchor
+          alignSelf="start"
           color="dark-3"
-          size="small"
+          size="xsmall"
           href="https://darksky.net/poweredby/"
           label="Powered by Dark Sky"
         />
         <Anchor
+          alignSelf="start"
           color="dark-3"
-          size="small"
+          size="xsmall"
           href="https://openweathermap.org/"
           label="OpenWeatherMap"
         />
         <Anchor
+          alignSelf="start"
           color="accent-4"
-          size="small"
+          size="xsmall"
           href="https://github.com/georgelioris/aerity-client"
           label="View on github"
         />
