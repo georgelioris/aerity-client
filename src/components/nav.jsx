@@ -2,8 +2,14 @@ import React from 'react';
 import { Box, Header, Heading } from 'grommet';
 
 const Nav = () => (
-  <Header background="brand" alignSelf="start" justify="center">
-    <Box basis="2/3" animation="fadeIn">
+  <Header
+    background="brand"
+    width="xlarge"
+    justify="start"
+    margin={{ left: 'large' }}
+    alignSelf="center"
+  >
+    <Box justify="start" animation="fadeIn">
       <Heading size="small">Aerity</Heading>
     </Box>
   </Header>
