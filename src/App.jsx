@@ -18,7 +18,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initState);
 
   useEffect(() => {
-    async function operation() {
+    (async () => {
       const appId = Cookies.get('appId');
       const localData = JSON.parse(localStorage.getItem('cached'));
       dispatch(setError({ status: false }));
@@ -52,9 +52,7 @@ function App() {
           dispatch(setLoading(false));
         }
       }
-    }
-
-    operation();
+    })();
   }, [state.geoLoc]);
 
   useEffect(() => {
