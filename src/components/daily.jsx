@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import ReactAnimatedWeather from 'react-animated-weather';
 import { formatIcon, parseDate } from '../lib/helpers';
-// import { Box, Heading } from 'grommet';
-// import ReactAnimatedWeather from 'react-animated-weather';
-// import { formatIcon, parseDate, parseTemp } from '../lib/helpers';
 
 const Day = ({ day: { icon, time, temperatureHigh, temperatureLow } }) => (
-  <Box direction="column" alignContent="center" pad={{ top: 'large' }}>
-    <Box style={{ margin: '0 auto' }}>{parseDate(time).split(' ')[0]}</Box>
+  <Box
+    direction="column"
+    margin={{ top: 'large' }}
+    pad={{ right: 'small', left: 'small' }}
+    align="center"
+  >
+    <Box align="center">{parseDate(time).split(' ')[0]}</Box>
     <Box pad="medium" style={{ minWidth: '34px', minHeight: '34px' }}>
       <ReactAnimatedWeather
         icon={formatIcon(icon)}
@@ -18,31 +20,26 @@ const Day = ({ day: { icon, time, temperatureHigh, temperatureLow } }) => (
         size={34}
       />
     </Box>
-    <Box style={{ margin: '0 auto' }}>
+    <Box align="center">
       {`${Math.round(temperatureHigh)}°/${Math.round(temperatureLow)}°`}
     </Box>
   </Box>
 );
 
-const Daily = ({ daily }) => {
-  const { data } = daily;
-  const days = data.map(
-    (day, _) => _ !== 0 && <Day key={day.time} day={day} />
-  );
-  return (
-    <>
-      <Box
-        pad={{ top: 'large' }}
-        direction="row"
-        wrap
-        justify="between"
-        style={{ margin: '0 auto' }}
-      >
-        {days}
-      </Box>
-    </>
-  );
-};
+const Daily = ({ daily: { data } }) => (
+  <Box
+    pad={{ top: 'large' }}
+    width="large"
+    direction="row"
+    align="center"
+    wrap
+    justify="between"
+    alignContent="center"
+  >
+    {data.map((day, _) => _ !== 0 && <Day key={day.time} day={day} />)}
+  </Box>
+);
+
 Daily.propTypes = {
   daily: PropTypes.shape({
     summary: PropTypes.string,
@@ -64,4 +61,5 @@ Daily.defaultProps = {
 Day.defaultProps = {
   day: undefined
 };
+
 export default Daily;
