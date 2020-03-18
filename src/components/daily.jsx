@@ -17,7 +17,7 @@ const Day = ({ day: { icon, time, temperatureHigh, temperatureLow } }) => (
         icon={formatIcon(icon)}
         color="#FFEAD0"
         animate={false}
-        size={34}
+        size={32}
       />
     </Box>
     <Box align="center">
