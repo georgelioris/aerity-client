@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { Main, Grommet, Box } from 'grommet';
+import { Main, Grommet, Box, Anchor, Footer } from 'grommet';
 import Cookies from 'js-cookie';
 import cuid from 'cuid';
 import Nav from './components/nav';
@@ -72,21 +72,51 @@ function App() {
 
   return (
     <Grommet theme={MyTheme}>
-      <Nav />
-      <Main margin={{ top: 'large' }} animation="fadeIn">
-        <Box
-          align="center"
-          style={{
-            color: 'white',
-            width: '60vw'
-          }}
-          alignSelf="center"
-        >
-          {state.isError.status && <p>{state.isError.message}</p>}
-          {state.wData && <Summary wData={state.wData} />}
-          {state.isLoading && <Spinner />}
-        </Box>
-      </Main>
+      <Box style={{ minHeight: '100vh' }} width="100%">
+        <Nav />
+        <Main margin={{ top: 'large' }} animation="fadeIn">
+          <Box
+            align="center"
+            style={{
+              color: 'white'
+            }}
+            pad="medium"
+            alignSelf="center"
+          >
+            {state.isError.status && <p>{state.isError.message}</p>}
+            {state.wData && <Summary wData={state.wData} />}
+            {state.isLoading && <Spinner />}
+          </Box>
+        </Main>
+      </Box>
+      <Footer
+        justify="center"
+        height="xsmall"
+        width="100%"
+        style={{
+          position: 'absolute',
+          bottom: '0'
+        }}
+      >
+        <Anchor
+          color="dark-3"
+          size="small"
+          href="https://darksky.net/poweredby/"
+          label="Powered by Dark Sky"
+        />
+        <Anchor
+          color="dark-3"
+          size="small"
+          href="https://openweathermap.org/"
+          label="OpenWeatherMap"
+        />
+        <Anchor
+          color="accent-4"
+          size="small"
+          href="https://github.com/georgelioris/aerity-client"
+          label="View on github"
+        />
+      </Footer>
       <style>
         {`
           body {
