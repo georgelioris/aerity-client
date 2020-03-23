@@ -1,14 +1,5 @@
-// export const errorHandler = fnDisp => (fnErr, value = true) => (
-//   fnLoad,
-//   value = false
-// ) => fn => (...params) =>
-//   fn(...params)
-//     .catch(e => fnDisp(fnErr(value)))
-//     .finally(() => fnDisp(fnLoad(!value)));
-// export const owmKey = process.env.REACT_APP_OWM_API_KEY;
-// export const baseUrl = `http://api.openweathermap.org/data/2.5/weather?`;
 export const dskyKey = process.env.REACT_APP_DARKSKY_API_KEY;
-export const formatUrl = (query, opts = '&units=metric') =>
+export const formatUrl = query =>
   `https://aerity-server.netlify.com/.netlify/functions/server/weather/${query}`;
 export const formatQuery = ({ lat, lon }) => {
   return `${lat.toFixed(4)}-${lon.toFixed(4)}`;
@@ -20,9 +11,8 @@ export const parseTemp = (val, units) =>
   `${Math.round(val)}${units === 'si' ? '°C' : '°F'}`;
 export const initState = {
   isLoading: false,
-  isError: { status: false, info: '' },
+  isError: { status: false, message: '' },
   geoLoc: null,
-  wData: null,
-  errMessage: ''
+  wData: null
 };
 export const isExpired = miliseconds => Date.now() - miliseconds > 300000;

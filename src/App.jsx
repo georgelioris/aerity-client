@@ -1,58 +1,48 @@
-import React, { useEffect, useReducer } from 'react';
-import { Main, Grommet, Box, Anchor, Footer } from 'grommet';
-import Cookies from 'js-cookie';
+import axios from 'axios';
 import cuid from 'cuid';
-import Nav from './components/nav';
-import Spinner from './components/spinner';
-import Summary from './components/summary';
-import MyTheme from './lib/MyTheme.json';
-import { setLoading, setError, setLocation, setwData } from './lib/actions';
-import { initState, formatUrl, formatQuery, isExpired } from './lib/helpers';
-import reducer from './lib/reducer';
-import fetchData from './lib/fetchData';
-// import mockFetch from './lib/mockFetch';
-// import sampleRes from './sampleRes';
+import Cookies from 'js-cookie';
+import React, { useEffect, useReducer } from 'react';
 import './App.css';
+import Page from './containers/page';
+import { setError, setLoading, setLocation, setwData } from './lib/actions';
+import { formatQuery, formatUrl, initState, isExpired } from './lib/helpers';
+import reducer from './lib/reducer';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initState);
 
   useEffect(() => {
-    (async () => {
-      const appId = Cookies.get('appId');
-      const localData = JSON.parse(localStorage.getItem('cached'));
+    const appId = Cookies.get('appId');
+    const localData = JSON.parse(localStorage.getItem('cached'));
+
+    async function fetchData(url, id) {
       dispatch(setError({ status: false }));
       dispatch(setLoading(true));
-
-      if (!state.geoLoc) {
-        dispatch(setError({ status: true, message: 'Location Error' }));
+      try {
+        const result = await axios.get(url, { params: { APPID: id } });
+        const cachedState = {
+          geoLoc: state.geoLoc,
+          data: JSON.stringify(result.data),
+          ts: Date.now()
+        };
+        dispatch(setwData(result.data));
+        localStorage.setItem('cached', JSON.stringify(cachedState));
+      } catch (error) {
+        dispatch(setError({ status: true, message: 'Connection Error' }));
+      } finally {
         dispatch(setLoading(false));
-      } else if (localData && !isExpired(localData.ts)) {
-        dispatch(setwData(JSON.parse(localData.data)));
-        dispatch(setError({ status: false }));
-        dispatch(setLoading(false));
-        // console.log('using cache');
-      } else {
-        const url = formatUrl(formatQuery(state.geoLoc));
-        try {
-          const result = await fetchData(url, { params: { APPID: appId } });
-          // const result = await mockFetch(sampleRes);
-          dispatch(setwData(result));
-          const cachedState = {
-            geoLoc: state.geoLoc,
-            data: JSON.stringify(result),
-            ts: Date.now()
-          };
-          // console.log('fetching new data');
-          localStorage.setItem('cached', JSON.stringify(cachedState));
-        } catch (error) {
-          dispatch(setError({ status: true, message: 'Connection Error' }));
-          // console.error(error);
-        } finally {
-          dispatch(setLoading(false));
-        }
       }
-    })();
+    }
+
+    if (!state.geoLoc) {
+      dispatch(setError({ status: true, message: 'Location Error' }));
+    } else if (localData && !isExpired(localData.ts)) {
+      dispatch(setError({ status: false }));
+      dispatch(setwData(JSON.parse(localData.data)));
+    } else {
+      const url = formatUrl(formatQuery(state.geoLoc));
+      fetchData(url, appId);
+    }
   }, [state.geoLoc]);
 
   useEffect(() => {
@@ -65,64 +55,6 @@ function App() {
     );
   }, []);
 
-  // State logging
-  // useEffect(() => {
-  //   console.log(state);
-  // }, [state]);
-
-  return (
-    <Grommet theme={MyTheme}>
-      <Box style={{ minHeight: '95vh' }} pad={{ botton: 'small' }} width="100%">
-        <Nav />
-        <Main pad={{ bottom: 'xlarge' }} animation="fadeIn">
-          <Box
-            align="center"
-            style={{
-              color: 'white'
-            }}
-            pad="medium"
-            alignSelf="center"
-          >
-            {state.isError.status && <p>{state.isError.message}</p>}
-            {state.wData && <Summary wData={state.wData} />}
-            {state.isLoading && <Spinner />}
-          </Box>
-        </Main>
-      </Box>
-      <Footer justify="center" alignContent="center" height="5vh" pad="small">
-        <Anchor
-          alignSelf="start"
-          color="dark-3"
-          size="xsmall"
-          href="https://darksky.net/poweredby/"
-          label="Powered by Dark Sky"
-        />
-        <Anchor
-          alignSelf="start"
-          color="dark-3"
-          size="xsmall"
-          href="https://openweathermap.org/"
-          label="OpenWeatherMap"
-        />
-        <Anchor
-          alignSelf="start"
-          color="accent-4"
-          size="xsmall"
-          href="https://github.com/georgelioris/aerity-client"
-          label="View on github"
-        />
-      </Footer>
-      <style>
-        {`
-          body {
-            margin: 0 auto;
-            background: #2e294e;
-            overflow-x: hidden;
-            user-select: none;
-          }
-        `}
-      </style>
-    </Grommet>
-  );
+  return <Page state={state} />;
 }
 export default App;

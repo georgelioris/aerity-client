@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Box, Heading } from 'grommet';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ReactAnimatedWeather from 'react-animated-weather';
 import { formatIcon, parseDate, parseTemp } from '../lib/helpers';
 import Daily from './daily';
