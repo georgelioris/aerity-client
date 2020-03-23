@@ -16,3 +16,9 @@ export const initState = {
   wData: null
 };
 export const isExpired = miliseconds => Date.now() - miliseconds > 300000;
+export const cachedState = (loc, data) =>
+  JSON.stringify({
+    geoLoc: loc,
+    data: JSON.stringify(data),
+    ts: Date.now()
+  });

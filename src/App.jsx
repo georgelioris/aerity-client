@@ -5,7 +5,13 @@ import React, { useEffect, useReducer } from 'react';
 import './App.css';
 import Page from './containers/page';
 import { setError, setLoading, setLocation, setwData } from './lib/actions';
-import { formatQuery, formatUrl, initState, isExpired } from './lib/helpers';
+import {
+  formatQuery,
+  formatUrl,
+  initState,
+  isExpired,
+  cachedState
+} from './lib/helpers';
 import reducer from './lib/reducer';
 
 function App() {
@@ -20,13 +26,8 @@ function App() {
       dispatch(setLoading(true));
       try {
         const result = await axios.get(url, { params: { APPID: id } });
-        const cachedState = {
-          geoLoc: state.geoLoc,
-          data: JSON.stringify(result.data),
-          ts: Date.now()
-        };
         dispatch(setwData(result.data));
-        localStorage.setItem('cached', JSON.stringify(cachedState));
+        localStorage.setItem('cached', cachedState(state.geoLoc, result.data));
       } catch (error) {
         dispatch(setError({ status: true, message: 'Connection Error' }));
       } finally {
