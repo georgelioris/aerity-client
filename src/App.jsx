@@ -29,18 +29,16 @@ function App() {
         dispatch(setwData(result.data));
         localStorage.setItem('cached', cachedState(state.geoLoc, result.data));
       } catch (error) {
-        dispatch(setError({ status: true, message: 'Connection Error' }));
+        dispatch(setError({ status: true, message: error.message }));
       } finally {
         dispatch(setLoading(false));
       }
     }
 
-    if (!state.geoLoc) {
-      dispatch(setError({ status: true, message: 'Location Error' }));
-    } else if (localData && !isExpired(localData.ts)) {
+    if (localData && !isExpired(localData.ts)) {
       dispatch(setError({ status: false }));
       dispatch(setwData(JSON.parse(localData.data)));
-    } else {
+    } else if (state.geoLoc) {
       const url = formatUrl(formatQuery(state.geoLoc));
       fetchData(url, appId);
     }
@@ -49,10 +47,18 @@ function App() {
   useEffect(() => {
     if (!Cookies.get('appId')) Cookies.set('appId', cuid());
 
-    navigator.geolocation.getCurrentPosition(pos =>
-      dispatch(
-        setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude })
-      )
+    dispatch(setLoading(true));
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        dispatch(
+          setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude })
+        );
+        dispatch(setLoading(false));
+      },
+      error => {
+        dispatch(setError({ status: true, message: error.message }));
+        dispatch(setLoading(false));
+      }
     );
   }, []);
 
