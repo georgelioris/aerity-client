@@ -14,7 +14,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.0",
     "cuid": "^2.1.6",
-    "grommet": "^2.9.0",
+    "grommet": "^2.13.0",
     "grommet-icons": "^4.4.0",
     "grommet-styles": "^0.2.0",
     "js-cookie": "^2.2.1",
