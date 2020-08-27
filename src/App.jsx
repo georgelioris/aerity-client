@@ -70,7 +70,7 @@ function App() {
         dispatch(setLoading(false));
       }
     );
-  }, []);
+  }
 
   return <Page state={{ ...state, getCoords }} />;
 }
