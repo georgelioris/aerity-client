@@ -1,6 +1,4 @@
 import axios from 'axios';
-import cuid from 'cuid';
-import Cookies from 'js-cookie';
 import React, { useEffect, useReducer } from 'react';
 import './App.css';
 import Page from './containers/page';
@@ -44,12 +42,11 @@ function App() {
     }
   }, [state.geoLoc]);
 
-  useEffect(() => {
-    if (!Cookies.get('appId')) Cookies.set('appId', cuid());
-
+  function getCoords() {
     dispatch(setLoading(true));
     navigator.geolocation.getCurrentPosition(
       pos => {
+        localStorage.removeItem('cached');
         dispatch(
           setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude })
         );
@@ -62,6 +59,6 @@ function App() {
     );
   }, []);
 
-  return <Page state={state} />;
+  return <Page state={{ ...state, getCoords }} />;
 }
 export default App;

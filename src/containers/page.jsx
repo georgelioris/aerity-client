@@ -1,4 +1,4 @@
-import { Box, Grommet, Main } from 'grommet';
+import { Box, Grommet, Main, Button } from 'grommet';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Footer from '../components/footer';
@@ -7,7 +7,7 @@ import Spinner from '../components/spinner';
 import Summary from '../components/summary';
 import MyTheme from '../lib/MyTheme.json';
 
-const Page = ({ state }) => (
+const Page = ({ state: { isLoading, isError, wData, getCoords } }) => (
   <Grommet theme={MyTheme}>
     <Box style={{ minHeight: '95vh' }} pad={{ botton: 'small' }} width="100%">
       <Nav />
@@ -20,9 +20,19 @@ const Page = ({ state }) => (
           pad="medium"
           alignSelf="center"
         >
-          {state.isError.status && <p>{state.isError.message}</p>}
-          {state.wData && <Summary wData={state.wData} />}
-          {state.isLoading && <Spinner />}
+          {isError.status && !isLoading && <p>{isError.message}</p>}
+          {wData && !isLoading && <Summary wData={wData} />}
+          {isLoading && <Spinner />}
+
+          {!isLoading && (
+            <Button
+              primary
+              margin={{ top: 'large' }}
+              color="accent-1"
+              label="Use my location"
+              onClick={getCoords}
+            />
+          )}
         </Box>
       </Main>
     </Box>
@@ -47,7 +57,8 @@ Page.propTypes = {
       status: PropTypes.bool,
       message: PropTypes.string
     }),
-    wData: PropTypes.object
+    wData: PropTypes.object,
+    getCoords: PropTypes.func
   })
 };
 Page.defaultProps = {
