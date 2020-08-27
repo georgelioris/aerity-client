@@ -1,9 +1,5 @@
-export const dskyKey = process.env.REACT_APP_DARKSKY_API_KEY;
-export const formatUrl = query =>
-  `https://aerity-server.netlify.app/.netlify/functions/server/weather/${query}`;
-export const formatQuery = ({ lat, lon }) => {
-  return `${lat.toFixed(4)}-${lon.toFixed(4)}`;
-};
+export const formatUrl = ({ lat, lon }) =>
+  `${process.env.REACT_APP_WEATHER_API}/${lat.toFixed(4)}-${lon.toFixed(4)}`;
 export const formatIcon = icon => icon.replace(/-/g, '_').toUpperCase();
 export const parseDate = seconds =>
   new Date(new Date(0).setUTCSeconds(seconds)).toDateString();

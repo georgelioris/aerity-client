@@ -3,13 +3,7 @@ import React, { useEffect, useReducer } from 'react';
 import './App.css';
 import Page from './containers/page';
 import { setError, setLoading, setLocation, setwData } from './lib/actions';
-import {
-  formatQuery,
-  formatUrl,
-  initState,
-  isExpired,
-  cachedState
-} from './lib/helpers';
+import { formatUrl, initState, isExpired, cachedState } from './lib/helpers';
 import reducer from './lib/reducer';
 
 function App() {
@@ -39,11 +33,11 @@ function App() {
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem('cached'));
 
-    async function fetchData(url, id) {
+    async function fetchData(url) {
       dispatch(setError({ status: false }));
       dispatch(setLoading(true));
       try {
-        const result = await axios.get(url, { params: { APPID: id } });
+        const result = await axios.get(url);
         dispatch(setwData(result.data));
         localStorage.setItem('cached', cachedState(state.geoLoc, result.data));
       } catch (error) {
@@ -57,8 +51,7 @@ function App() {
       dispatch(setError({ status: false }));
       dispatch(setwData(JSON.parse(localData.data)));
     } else if (state.geoLoc) {
-      const url = formatUrl(formatQuery(state.geoLoc));
-      fetchData(url, appId);
+      fetchData(formatUrl(state.geoLoc));
     }
   }, [state.geoLoc]);
 
