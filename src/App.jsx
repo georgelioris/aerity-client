@@ -16,7 +16,27 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initState);
 
   useEffect(() => {
-    const appId = Cookies.get('appId');
+    (async () => {
+      dispatch(setError({ status: false }));
+      dispatch(setLoading(true));
+      try {
+        const location = await axios.get(process.env.REACT_APP_GEO_API);
+        dispatch(
+          setLocation({
+            lat: location.data.location.lat,
+            lon: location.data.location.lng
+          })
+        );
+      } catch (error) {
+        dispatch(setError({ status: true, message: error.message }));
+        dispatch(setLoading(false));
+      } finally {
+        dispatch(setLoading(false));
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     const localData = JSON.parse(localStorage.getItem('cached'));
 
     async function fetchData(url, id) {
