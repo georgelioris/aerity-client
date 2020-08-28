@@ -7,7 +7,7 @@ import Spinner from '../components/spinner';
 import Summary from '../components/summary';
 import MyTheme from '../lib/MyTheme.json';
 
-const Page = ({ state: { isLoading, isError, wData, getCoords } }) => (
+const Page = ({ state: { isLoading, isError, wData, getCoords, button } }) => (
   <Grommet theme={MyTheme}>
     <Box style={{ minHeight: '95vh' }} pad={{ botton: 'small' }} width="100%">
       <Nav />
@@ -24,13 +24,15 @@ const Page = ({ state: { isLoading, isError, wData, getCoords } }) => (
           {wData && !isLoading && <Summary wData={wData} />}
           {isLoading && <Spinner />}
 
-          {!isLoading && (
+          {!isLoading && button && (
             <Button
               primary
               margin={{ top: 'large' }}
               color="accent-1"
               label="Use my location"
-              onClick={getCoords}
+              onClick={() => {
+                getCoords(true, true);
+              }}
             />
           )}
         </Box>
