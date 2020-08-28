@@ -12,6 +12,8 @@ const reducer = (state, action) => {
       return { ...state, geoLoc: value };
     case 'SET_WDATA':
       return { ...state, wData: value };
+    case 'SET_BUTTON':
+      return { ...state, button: value };
 
     default:
       return state;
