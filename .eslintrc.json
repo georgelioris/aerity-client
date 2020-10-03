@@ -15,6 +15,10 @@
   ],
   "plugins": ["react-hooks", "prettier", "react"],
   "rules": {
+    "react/jsx-wrap-multilines": [
+      "error",
+      { "declaration": false, "assignment": false }
+    ],
     "prettier/prettier": "warn",
     "no-unused-vars": "warn",
     "no-console": "warn"
