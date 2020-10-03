@@ -15,16 +15,16 @@ const calcVolume = (value, unit) => {
   return `${Math.round(percentage)}%`;
 };
 
-const Drop = ({ volume }) => (
+const Drop = ({ volume, id }) => (
   <svg width="30px" height="42px" viewBox="0 0 30 42">
-    <linearGradient id="lg" x1="0.5" y1="1" x2="0.5" y2="0">
+    <linearGradient id={id} x1="0.5" y1="1" x2="0.5" y2="0">
       <stop offset="0%" stopOpacity="1" stopColor="#7796CB" />
       <stop offset={volume} stopOpacity="1" stopColor="#7796CB" />
       <stop offset={volume} stopOpacity="0" stopColor="#7796CB" />
       <stop offset="100%" stopOpacity="0" stopColor="#7796CB" />
     </linearGradient>
     <path
-      fill="url(#lg)"
+      fill={`url(#${id})`}
       stroke="#7796CB"
       strokeWidth="1.5"
       d="M15 3
@@ -35,7 +35,7 @@ const Drop = ({ volume }) => (
   </svg>
 );
 
-const RainDrop = ({ precipIntensity, units }) => {
+const RainDrop = ({ precipIntensity, units, id }) => {
   const [volume, setVolume] = useState('0%');
   useEffect(() => {
     if (precipIntensity === 0) setVolume('0%');
@@ -45,7 +45,7 @@ const RainDrop = ({ precipIntensity, units }) => {
 
   return (
     <Box>
-      <Drop volume={volume} />
+      <Drop volume={volume} id={id} />
     </Box>
   );
 };
