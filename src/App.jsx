@@ -1,15 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import './App.css';
 import Page from './containers/page';
-import {
-  setError,
-  setLoading,
-  setLocation,
-  setwData,
-  setButton
-} from './lib/actions';
-import { formatUrl, initState, isExpired, cachedState } from './lib/helpers';
+import { setError, setLoading, setLocation, setwData } from './lib/actions';
+import { cachedState, initState, isExpired } from './lib/helpers';
 import reducer from './lib/reducer';
 
 const hasPermissionsApi = Object.prototype.hasOwnProperty.call(
@@ -17,11 +11,15 @@ const hasPermissionsApi = Object.prototype.hasOwnProperty.call(
   'permissions'
 );
 
+const axiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_WEATHER_API,
+  headers: { 'X-Requested-With': 'XMLHttpRequest' }
+});
+
 function App() {
   const [state, dispatch] = useReducer(reducer, initState);
 
-  function getCoords(clearCache = false, useGPS = false) {
-    dispatch(setLoading(true));
+  const getCoords = useCallback(({ clearCache, useGPS }) => {
     if (clearCache) localStorage.removeItem('cached');
     if (useGPS) {
       navigator.geolocation.getCurrentPosition(
@@ -32,18 +30,15 @@ function App() {
               lon: pos.coords.longitude
             })
           );
-          dispatch(setLoading(false));
-          dispatch(setButton(false));
         },
         (error) => {
           dispatch(setError({ status: true, message: error.message }));
-          dispatch(setLoading(false));
+          getCoords({ useGPS: false, clearCache });
         }
       );
     } else {
       (async () => {
         dispatch(setError({ status: false }));
-        dispatch(setLoading(true));
         try {
           const location = await axios.get(process.env.REACT_APP_GEO_API);
           dispatch(
@@ -54,30 +49,38 @@ function App() {
           );
         } catch (error) {
           dispatch(setError({ status: true, message: error.message }));
-        } finally {
-          dispatch(setLoading(false));
         }
       })();
     }
-  }
-  useEffect(() => {
-    if (hasPermissionsApi) {
-      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        if (result.state === 'granted') {
-          getCoords(false, true);
-        } else getCoords();
-      });
-    } else getCoords();
   }, []);
 
-  useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem('cached'));
+  async function fetchCoords(location) {
+    const url = `/location/${location.split(',').slice(0, 2).join('/')}`;
+    dispatch(setError({ status: false }));
+    dispatch(setLoading(true));
+    try {
+      const { data } = await axiosInstance.get(url);
+      dispatch(setwData(data));
+    } catch (error) {
+      dispatch(
+        setError({
+          status: true,
+          message: error.response?.data || error.message
+        })
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }
 
-    async function fetchData(url) {
+  const fetchData = useCallback(
+    async ({ lat, lon }) => {
       dispatch(setError({ status: false }));
       dispatch(setLoading(true));
       try {
-        const result = await axios.get(url);
+        const result = await axiosInstance.get(
+          `/weather/${lat.toFixed(4)},${lon.toFixed(4)}`
+        );
         dispatch(setwData(result.data));
         localStorage.setItem('cached', cachedState(state.geoLoc, result.data));
       } catch (error) {
@@ -85,18 +88,27 @@ function App() {
       } finally {
         dispatch(setLoading(false));
       }
+    },
+    [state.geoLoc]
+  );
+
+  useEffect(() => {
+    if (hasPermissionsApi) {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        if (result.state === 'granted') getCoords({ useGPS: true });
+      });
     }
+  }, [getCoords]);
+
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem('cached'));
 
     if (localData && !isExpired(localData.ts)) {
       dispatch(setError({ status: false }));
       dispatch(setwData(JSON.parse(localData.data)));
-    } else if (state.geoLoc) fetchData(formatUrl(state.geoLoc));
-  }, [state.geoLoc]);
-  useEffect(() => {
-    /* eslint-disable no-console */
-    console.log(state);
-  });
+    } else if (state.geoLoc) fetchData(state.geoLoc);
+  }, [state.geoLoc, fetchData]);
 
-  return <Page state={{ ...state, getCoords }} />;
+  return <Page state={{ ...state, getCoords, fetchCoords }} />;
 }
 export default App;
