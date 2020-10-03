@@ -14,7 +14,3 @@ export const setwData = (value) => ({
   type: 'SET_WDATA',
   value
 });
-export const setButton = (value) => ({
-  type: 'SET_BUTTON',
-  value
-});

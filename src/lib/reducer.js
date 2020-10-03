@@ -6,14 +6,12 @@ const reducer = (state, action) => {
     case 'SET_ERROR':
       return {
         ...state,
-        isError: { ...value }
+        isError: { ...state.isError, ...value }
       };
     case 'SET_LOCATION':
       return { ...state, geoLoc: value };
     case 'SET_WDATA':
       return { ...state, wData: value };
-    case 'SET_BUTTON':
-      return { ...state, button: value };
 
     default:
       return state;
