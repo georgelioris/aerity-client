@@ -1,6 +1,6 @@
 import { Box, Text, Collapsible } from 'grommet';
 import PropTypes from 'prop-types';
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import { parseUvIndex } from '../lib/helpers';
 import { windEntry } from './wind';
 import Section from './section';
@@ -22,18 +22,14 @@ const DayExpand = ({
   units,
   formatDate
 }) => {
-  const labelDate = useCallback(
-    (seconds) => {
+  const entries = useMemo(() => {
+    const labelDate = (seconds) =>
       formatDate(seconds, {
         timeZone: 'UTC',
         hour: 'numeric',
         minute: 'numeric'
       });
-    },
-    [formatDate]
-  );
-  const entries = useMemo(
-    () => [
+    return [
       ['Wind', `${windEntry(units)(windSpeed, windBearing)}`],
       ['Humidity', `${humidity * 100}%`],
       ['UV Index', parseUvIndex(uvIndex)],
@@ -42,19 +38,18 @@ const DayExpand = ({
         'Chance of rain',
         `${precipProbability * 100}%`
       ]
-    ],
-    [
-      precipProbability,
-      humidity,
-      uvIndex,
-      sunriseTime,
-      sunsetTime,
-      windBearing,
-      windSpeed,
-      units,
-      labelDate
-    ]
-  );
+    ];
+  }, [
+    precipProbability,
+    humidity,
+    uvIndex,
+    sunriseTime,
+    sunsetTime,
+    windBearing,
+    windSpeed,
+    units,
+    formatDate
+  ]);
   return (
     <Collapsible open={open}>
       <Box direction="row" gap="xlarge" margin={{ top: 'medium' }}>
