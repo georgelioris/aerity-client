@@ -59,14 +59,14 @@ const DayExpand = ({
           gap="0.15rem"
         >
           {entries.map((entry) => (
-            <Text size="1rem" color="dark-5" key={entry[0] || '-1'}>
+            <Text size="0.9rem" color="dark-5" key={entry[0] || '-1'}>
               {entry[0]}
             </Text>
           ))}
         </Box>
         <Box direction="column" alignSelf="start" gap="0.15rem">
           {entries.map((entry) => (
-            <Text size="1rem" key={entry[0] || '-1'}>
+            <Text size="0.9rem" key={entry[0] || '-1'}>
               {entry[1]}
             </Text>
           ))}
