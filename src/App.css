@@ -1,38 +1,141 @@
-.App {
-  text-align: center;
+* {
+  font-family: 'Roboto', sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  margin: 0 auto;
+  background: #c9cad9;
+  overflow-x: hidden;
+  user-select: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@media only screen and (min-width: 340px) and (min-height: 450px) {
+  #hourly {
+    position: absolute !important;
+    bottom: 0;
+  }
+
+  #currently-container {
+    min-height: auto !important;
+  }
+
+  #portrait {
+    min-height: 100vh !important;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+@media only screen and (min-height: 600px) {
+  #hourly {
+    position: absolute !important;
+    bottom: 0;
+  }
+
+  #currently-container {
+    min-height: auto !important;
+  }
+}
+
+@media only screen and (max-width: 340px) {
+  #currently {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #portrait {
+    min-height: 100vh !important;
+  }
+}
+
+@media only screen and (min-width: 770px) {
+  #portrait {
+    min-height: calc(100vh - 2rem) !important;
+  }
+
+  #round {
+    border-radius: 1.5rem !important;
+    margin-top: 2rem !important;
+  }
+
+  #portrait,
+  #landing {
+    border-top-right-radius: 1.5rem;
+    border-top-left-radius: 1.5rem;
+  }
+
+  #main-container {
+    min-height: 93vh !important;
+    margin-bottom: 2vh !important;
+  }
+
+  #landing {
+    min-height: calc(100vh - 115px) !important;
+  }
+
+  .sticky {
+    right: 50% !important;
+    margin-right: -374px !important;
+  }
+}
+
+#round {
+  border-radius: 0;
+  margin-top: 0;
+}
+
+#hourly {
+  position: relative;
+  max-width: 100vw;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#currently-container {
+  min-height: 100vh;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#landing {
+  min-height: calc(100vh - 51px);
+  max-width: 100vw;
+}
+
+#portrait {
+  min-height: calc(100vh - 51px);
+  max-width: 100vw;
+  background: rgb(46, 41, 78);
+  background: linear-gradient(
+    0deg,
+    rgba(46, 41, 78, 1) 0%,
+    rgba(104, 94, 170, 1) 65%,
+    rgba(135, 126, 187, 1) 100%
+  );
+}
+
+.overflow-container {
+  overflow-x: auto;
+  max-width: 2000px;
+  padding-bottom: 1rem;
+}
+
+.circle-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.3rem;
+}
+
+::-webkit-scrollbar-track {
+  border: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #57597a;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #41435c;
 }

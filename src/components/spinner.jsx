@@ -29,9 +29,13 @@ const spinning = (
 );
 
 const Spinner = () => (
-  <Box align="center" justify="center">
-    {spinning}
-  </Box>
+  <div id="portrait">
+    <Box width="large">
+      <Box align="center" justify="center" margin={{ top: '40vh' }}>
+        {spinning}
+      </Box>
+    </Box>
+  </div>
 );
 
 export default Spinner;

@@ -1,54 +1,52 @@
-import { Box, Grommet, Main, Button } from 'grommet';
+import { Box, Grommet } from 'grommet';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Footer from '../components/footer';
-import Nav from '../components/nav';
+import Notification from '../components/notification';
 import Spinner from '../components/spinner';
-import Summary from '../components/summary';
-import MyTheme from '../lib/MyTheme.json';
+import Sticky from '../components/sticky';
+import grommet from '../lib/grommet.json';
+import Landing from './landing';
+import Summary from './summary';
 
-const Page = ({ state: { isLoading, isError, wData, getCoords, button } }) => (
-  <Grommet theme={MyTheme}>
-    <Box style={{ minHeight: '95vh' }} pad={{ botton: 'small' }} width="100%">
-      <Nav />
-      <Main pad={{ bottom: 'xlarge' }} animation="fadeIn">
-        <Box
-          align="center"
-          style={{
-            color: 'white'
-          }}
-          pad="medium"
-          alignSelf="center"
-        >
-          {isError.status && !isLoading && <p>{isError.message}</p>}
-          {wData && !isLoading && <Summary wData={wData} />}
-          {isLoading && <Spinner />}
-
-          {!isLoading && button && (
-            <Button
-              primary
-              margin={{ top: 'large' }}
-              color="accent-1"
-              label="Use my location"
-              onClick={() => {
-                getCoords(true, true);
-              }}
-            />
-          )}
-        </Box>
-      </Main>
+const Page = ({
+  state: { isLoading, isError, wData, getCoords, fetchCoords }
+}) => (
+  <Grommet theme={grommet} plain>
+    <Box
+      style={{ minHeight: '95vh' }}
+      width="100%"
+      pad="none"
+      id="main-container"
+    >
+      <Box
+        id="round"
+        animation="fadeIn"
+        align="center"
+        pad="none"
+        alignSelf="center"
+        background={!wData ? '#877ebb' : 'white'}
+        elevation="large"
+      >
+        <Notification error={isError} />
+        {wData && (
+          <Sticky
+            getCoords={() => getCoords({ clearCache: true, useGPS: true })}
+            fetchCoords={fetchCoords}
+            location={wData.location}
+          />
+        )}
+        {wData && !isLoading && <Summary wData={wData} />}
+        {isLoading && <Spinner />}
+        {!wData && !isLoading && (
+          <Landing
+            getCoords={() => getCoords({ clearCache: true, useGPS: true })}
+            fetchCoords={fetchCoords}
+          />
+        )}
+        <Footer />
+      </Box>
     </Box>
-    <Footer />
-    <style>
-      {`
-          body {
-            margin: 0 auto;
-            background: #2e294e;
-            overflow-x: hidden;
-            user-select: none;
-          }
-        `}
-    </style>
   </Grommet>
 );
 
@@ -59,8 +57,9 @@ Page.propTypes = {
       status: PropTypes.bool,
       message: PropTypes.string
     }),
-    wData: PropTypes.object,
-    getCoords: PropTypes.func
+    wData: PropTypes.oneOfType([PropTypes.object]),
+    getCoords: PropTypes.func,
+    fetchCoords: PropTypes.func
   })
 };
 Page.defaultProps = {
