@@ -1,7 +1,7 @@
 import { Box, Text, Collapsible } from 'grommet';
 import PropTypes from 'prop-types';
-import React, { useState, useMemo } from 'react';
-import { parseDate, parseUvIndex } from '../lib/helpers';
+import React, { useState, useMemo, useCallback } from 'react';
+import { parseUvIndex } from '../lib/helpers';
 import { windEntry } from './wind';
 import Section from './section';
 import WeatherIcon from './weatherIcon';
@@ -19,20 +19,25 @@ const DayExpand = ({
     windSpeed
   },
   open,
-  units
+  units,
+  formatDate
 }) => {
+  const labelDate = useCallback(
+    (seconds) => {
+      formatDate(seconds, {
+        timeZone: 'UTC',
+        hour: 'numeric',
+        minute: 'numeric'
+      });
+    },
+    [formatDate]
+  );
   const entries = useMemo(
     () => [
       ['Wind', `${windEntry(units)(windSpeed, windBearing)}`],
       ['Humidity', `${humidity * 100}%`],
       ['UV Index', parseUvIndex(uvIndex)],
-      [
-        'Sunrise/sunset',
-        `${parseDate(sunriseTime, {
-          hour: 'numeric',
-          minute: 'numeric'
-        })}, ${parseDate(sunsetTime, { hour: 'numeric', minute: 'numeric' })}`
-      ],
+      ['Sunrise/sunset', `${labelDate(sunriseTime)}, ${labelDate(sunsetTime)}`],
       precipProbability > 0.3 && [
         'Chance of rain',
         `${precipProbability * 100}%`
@@ -46,7 +51,8 @@ const DayExpand = ({
       sunsetTime,
       windBearing,
       windSpeed,
-      units
+      units,
+      labelDate
     ]
   );
   return (
@@ -79,7 +85,8 @@ const DayExpand = ({
 const Day = ({
   day: { icon, time, temperatureHigh, temperatureLow, summary },
   units,
-  day
+  day,
+  formatDate
 }) => {
   const [open, setOpen] = useState(false);
   return (
@@ -101,7 +108,7 @@ const Day = ({
           width="calc(100% - 120px)"
         >
           <Text size="1rem">
-            <b>{parseDate(time, { weekday: 'long' })}</b>
+            <b>{formatDate(time, { timeZone: 'UTC', weekday: 'long' })}</b>
           </Text>
           <Text size="1rem" color="dark-5">
             {summary}
@@ -122,19 +129,19 @@ const Day = ({
           </Box>
         </Box>
       </Box>
-      <DayExpand day={day} open={open} units={units} />
+      <DayExpand day={day} open={open} units={units} formatDate={formatDate} />
     </Box>
   );
 };
 
-const Daily = ({ daily: { data, summary }, units }) => (
+const Daily = ({ daily: { data, summary }, units, formatDate }) => (
   <Box background="#f8f8f8" pad={{ bottom: 'medium' }}>
     <Section title="This week" pad="none">
       <Box style={{ textAlign: 'center' }} margin={{ bottom: 'medium' }}>
         <Text color="dark-5">{summary}</Text>
       </Box>
       {data.slice(1).map((day) => (
-        <Day key={day.time} day={day} units={units} />
+        <Day key={day.time} day={day} units={units} formatDate={formatDate} />
       ))}
     </Section>
   </Box>
@@ -151,7 +158,8 @@ DayExpand.propTypes = {
     windSpeed: PropTypes.number
   }),
   units: PropTypes.string.isRequired,
-  open: PropTypes.bool
+  open: PropTypes.bool,
+  formatDate: PropTypes.func.isRequired
 };
 
 Day.propTypes = {
@@ -162,7 +170,8 @@ Day.propTypes = {
     temperatureLow: PropTypes.number,
     summary: PropTypes.string
   }),
-  units: PropTypes.string.isRequired
+  units: PropTypes.string.isRequired,
+  formatDate: PropTypes.func.isRequired
 };
 
 Daily.propTypes = {
@@ -171,7 +180,8 @@ Daily.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
     summary: PropTypes.string
   }),
-  units: PropTypes.string.isRequired
+  units: PropTypes.string.isRequired,
+  formatDate: PropTypes.func.isRequired
 };
 
 DayExpand.defaultProps = {

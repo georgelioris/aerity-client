@@ -6,7 +6,8 @@ export const parseDate = (
     month: 'long',
     day: 'numeric',
     hour: 'numeric',
-    minute: 'numeric'
+    minute: 'numeric',
+    timeZone: 'UTC'
   }
 ) =>
   new Intl.DateTimeFormat('en', options).format(

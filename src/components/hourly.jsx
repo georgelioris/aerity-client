@@ -5,11 +5,6 @@ import { toKelvin } from '../lib/helpers';
 import { useNodeSize } from '../lib/hooks';
 import WeatherIcon from './weatherIcon';
 
-const labelDate = (seconds) =>
-  new Intl.DateTimeFormat('en', {
-    hour: 'numeric'
-  }).format(new Date(0).setUTCSeconds(seconds));
-
 const labelTemp = (temp) => `${Math.round(temp)}${String.fromCharCode(176)}`;
 const absoluteDistance = (convertFn = (a) => a) => (minVal, maxVal) => (val) =>
   Math.round(144 - ((convertFn(val) - minVal) * 144) / (maxVal - minVal));
@@ -73,7 +68,7 @@ const TemperatureRow = ({ hours, labelDistance, setMarginTop }) => {
   );
 };
 
-const IconTimeRow = ({ hours }) => (
+const IconTimeRow = ({ hours, formatDate }) => (
   <GraphRow>
     {hours.map(({ time, icon }) => (
       <Box direction="column" align="center" key={time} width="48px">
@@ -90,7 +85,7 @@ const IconTimeRow = ({ hours }) => (
             fontWeight: 500
           }}
         >
-          {labelDate(time)}
+          {formatDate(time)}
         </div>
       </Box>
     ))}
@@ -132,7 +127,7 @@ const Graph = ({ hours, absoluteTemp, marginTop, min, max }) => {
   );
 };
 
-const Hourly = ({ hours, units }) => {
+const Hourly = ({ hours, units, formatDate }) => {
   const labeledhours = hours.slice(1, 24);
   const maxTemp = toKelvin(units)(
     Math.round(
@@ -166,7 +161,7 @@ const Hourly = ({ hours, units }) => {
         max={maxTemp}
         min={minTemp}
       />
-      <IconTimeRow hours={labeledhours} />
+      <IconTimeRow hours={labeledhours} formatDate={formatDate} />
     </GraphContainer>
   );
 };
@@ -202,12 +197,14 @@ TemperatureRow.propTypes = {
 };
 
 IconTimeRow.propTypes = {
-  hours: PropTypes.arrayOf(PropTypes.object).isRequired
+  hours: PropTypes.arrayOf(PropTypes.object).isRequired,
+  formatDate: PropTypes.func.isRequired
 };
 
 Hourly.propTypes = {
   hours: PropTypes.arrayOf(PropTypes.object).isRequired,
-  units: PropTypes.string.isRequired
+  units: PropTypes.string.isRequired,
+  formatDate: PropTypes.func.isRequired
 };
 
 Graph.propTypes = {

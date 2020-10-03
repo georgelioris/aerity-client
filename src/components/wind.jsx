@@ -5,12 +5,8 @@ import React from 'react';
 import { isSI } from '../lib/helpers';
 import Section from './section';
 
-export const formatWSpeed = (units) => (speed) =>
+const formatWSpeed = (units) => (speed) =>
   units === 'si' ? Math.round(speed * 3.6) : Math.round(speed);
-const labelDate = (seconds) =>
-  new Intl.DateTimeFormat('en', {
-    hour: 'numeric'
-  }).format(new Date(0).setUTCSeconds(seconds));
 
 const getSteps = (units) =>
   units === 'si' || units === 'ca'
@@ -83,7 +79,13 @@ export const windEntry = (units) => (speed, bearing) =>
     isSI(units) ? 'km/h' : 'mph'
   }, ${windDirection(bearing, true)}`;
 
-const Wind = ({ hours, units, currentWindSpeed, currentWindBearing }) => {
+const Wind = ({
+  hours,
+  units,
+  currentWindSpeed,
+  currentWindBearing,
+  formatDate
+}) => {
   const formatSpeed = formatWSpeed(units);
   const formatedCurrentSpeed = `${formatSpeed(currentWindSpeed)}`;
   const labelUnits = isSI(units) ? 'km/h' : 'mph';
@@ -158,7 +160,7 @@ const Wind = ({ hours, units, currentWindSpeed, currentWindBearing }) => {
           >
             {hours.map(({ time, windSpeed, windBearing }) => {
               const formatedSpeed = `${formatSpeed(windSpeed)}`;
-              const timeStamp = labelDate(time);
+              const timeStamp = formatDate(time);
               const labelBg = labelColor(formatedSpeed, units);
               return (
                 <Box direction="column" key={time} align="center">
@@ -210,5 +212,6 @@ Wind.propTypes = {
   ).isRequired,
   units: PropTypes.string.isRequired,
   currentWindSpeed: PropTypes.number.isRequired,
-  currentWindBearing: PropTypes.number.isRequired
+  currentWindBearing: PropTypes.number.isRequired,
+  formatDate: PropTypes.func.isRequired
 };

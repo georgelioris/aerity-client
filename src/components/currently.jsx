@@ -7,7 +7,13 @@ import { parseDate, displayHighLow, isSI } from '../lib/helpers';
 const displayApparentTemp = (temp) =>
   `${Math.round(temp)}${String.fromCharCode(176)}`;
 const calcDate = (offset) =>
-  parseDate(Math.round(new Date().getTime() / 1000 + Number(offset)));
+  parseDate(Math.round(new Date().getTime() / 1000) + Number(offset), {
+    timeZone: 'UTC',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  });
 
 const LeftBox = ({
   temp,

@@ -12,7 +12,7 @@ const Details = ({
 }) => {
   const entries = useMemo(
     () => [
-      ['Humidity', `${humidity * 100}%`],
+      ['Humidity', `${Math.round(humidity * 100)}%`],
       ['Dew point', `${labelTemp(dewPoint)}${isSI(units) ? 'C' : 'F'} `],
       [
         'Visibility',

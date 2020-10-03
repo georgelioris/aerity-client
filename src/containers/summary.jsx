@@ -7,12 +7,20 @@ import Details from '../components/details';
 import Hourly from '../components/hourly';
 import Precipitation from '../components/precipitation';
 import Wind from '../components/wind';
+import { parseDate } from '../lib/helpers';
 
 const Summary = ({ wData }) => {
   const { currently, timezone, location, flags, daily } = wData;
   const today = daily.data[0];
   const { summary } = today;
   const hours = wData.hourly.data.slice(0, 25);
+  const formatDate = (
+    seconds,
+    opts = {
+      hour: 'numeric',
+      timeZone: 'UTC'
+    }
+  ) => parseDate(seconds + Number(timezone), opts);
 
   return (
     <>
@@ -25,17 +33,22 @@ const Summary = ({ wData }) => {
             <Text color="#F8F8FA">{summary}</Text>
           </Box>
         </div>
-        <Hourly hours={hours} units={flags.units} />
+        <Hourly hours={hours} units={flags.units} formatDate={formatDate} />
       </div>
       <Details details={currently} units={flags.units} />
-      <Precipitation hours={hours} units={flags.units} />
+      <Precipitation
+        hours={hours}
+        units={flags.units}
+        formatDate={formatDate}
+      />
       <Wind
         hours={hours}
         currentWindSpeed={currently.windSpeed}
         currentWindBearing={currently.windBearing}
         units={flags.units}
+        formatDate={formatDate}
       />
-      <Daily daily={daily} units={flags.units} />
+      <Daily daily={daily} units={flags.units} formatDate={formatDate} />
     </>
   );
 };
