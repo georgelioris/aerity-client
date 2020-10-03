@@ -59,17 +59,19 @@ const labelColor = (speed, units) => {
   return colors[scale];
 };
 
-const windDirection = (deg) => {
-  const directions = [
-    'north',
-    'northeast',
-    'east',
-    'southeast',
-    'south',
-    'southwest',
-    'west',
-    'nortwest'
-  ];
+const windDirection = (deg, short = false) => {
+  const directions = short
+    ? ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+    : [
+        'north',
+        'northeast',
+        'east',
+        'southeast',
+        'south',
+        'southwest',
+        'west',
+        'nortwest'
+      ];
 
   const steps = ['0', '45', '90', '135', '180', '225', '270', '315'];
   const scale = windScale(deg, steps);
@@ -79,7 +81,7 @@ const windDirection = (deg) => {
 export const windEntry = (units) => (speed, bearing) =>
   `${windLabel(speed, units)}, ${formatWSpeed(units)(speed)} ${
     isSI(units) ? 'km/h' : 'mph'
-  }, ${windDirection(bearing)} `;
+  }, ${windDirection(bearing, true)}`;
 
 const Wind = ({ hours, units, currentWindSpeed, currentWindBearing }) => {
   const formatSpeed = formatWSpeed(units);
