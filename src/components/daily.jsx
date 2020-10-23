@@ -31,12 +31,12 @@ const DayExpand = ({
       });
     return [
       ['Wind', `${windEntry(units)(windSpeed, windBearing)}`],
-      ['Humidity', `${humidity * 100}%`],
+      ['Humidity', `${Math.round(humidity * 100)}%`],
       ['UV Index', parseUvIndex(uvIndex)],
       ['Sunrise/sunset', `${labelDate(sunriseTime)}, ${labelDate(sunsetTime)}`],
       precipProbability > 0.3 && [
         'Chance of rain',
-        `${precipProbability * 100}%`
+        `${Math.round(precipProbability * 100)}%`
       ]
     ];
   }, [
