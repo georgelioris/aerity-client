@@ -29,7 +29,7 @@ const Page = ({
         elevation="large"
       >
         <Notification error={isError} />
-        {wData && (
+        {wData && !isLoading && (
           <Sticky
             getCoords={() => getCoords({ clearCache: true, useGPS: true })}
             fetchCoords={fetchCoords}
