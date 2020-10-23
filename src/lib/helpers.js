@@ -52,3 +52,6 @@ export const parseUvIndex = (uvidx) => {
   );
   return `${labels[scale]}, ${uvidx}`;
 };
+export const setCache = (geoLoc) => (data) => {
+  localStorage.setItem('cached', cachedState(geoLoc, data));
+};
