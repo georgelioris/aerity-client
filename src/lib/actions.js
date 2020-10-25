@@ -1,3 +1,5 @@
+import { isExpired } from './helpers';
+
 export const setLoading = (value) => ({
   type: 'SET_LOADING',
   value
@@ -45,6 +47,7 @@ export const getLocation = (dispatch, axios) => ({ clearCache, useGPS }) => {
           })
         );
       } catch (error) {
+        dispatch(setLoading(false));
         dispatch(setError({ status: true, message: error.message }));
       }
     })();
@@ -69,6 +72,7 @@ export const getDataByName = (dispatch, axiosInstance) => async (location) => {
     dispatch(setLoading(false));
   }
 };
+
 export const getDataByCoords = (dispatch, axiosInstance, setCache) => async ({
   lat,
   lon
@@ -86,4 +90,12 @@ export const getDataByCoords = (dispatch, axiosInstance, setCache) => async ({
   } finally {
     dispatch(setLoading(false));
   }
+};
+
+export const onGeoLocationChange = (dispatch) => (fetchData, geoLoc) => {
+  const localData = JSON.parse(localStorage.getItem('cached'));
+
+  if (localData && !isExpired(localData.ts)) {
+    dispatch(setwData(JSON.parse(localData.data)));
+  } else if (geoLoc) fetchData(geoLoc);
 };

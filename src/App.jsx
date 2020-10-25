@@ -4,11 +4,11 @@ import './App.css';
 import Page from './containers/page';
 import {
   getLocation,
-  setwData,
   getDataByName,
-  getDataByCoords
+  getDataByCoords,
+  onGeoLocationChange
 } from './lib/actions';
-import { initState, isExpired, setCache } from './lib/helpers';
+import { initState, setCache } from './lib/helpers';
 import reducer from './lib/reducer';
 
 const hasPermissionsApi = Object.prototype.hasOwnProperty.call(
@@ -30,6 +30,7 @@ function App() {
     () => getDataByCoords(dispatch, axiosInstance, setCache(state.geoLoc)),
     [state.geoLoc]
   );
+  const onGeoLocChange = useMemo(() => onGeoLocationChange(dispatch), []);
 
   useEffect(() => {
     if (hasPermissionsApi) {
@@ -40,12 +41,8 @@ function App() {
   }, [getCoords]);
 
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem('cached'));
-
-    if (localData && !isExpired(localData.ts)) {
-      dispatch(setwData(JSON.parse(localData.data)));
-    } else if (state.geoLoc) fetchData(state.geoLoc);
-  }, [state.geoLoc, fetchData]);
+    onGeoLocChange(fetchData, state.geoLoc);
+  }, [onGeoLocChange, fetchData, state.geoLoc]);
 
   return <Page state={{ ...state, getCoords, fetchCoords }} />;
 }
