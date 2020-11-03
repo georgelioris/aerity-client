@@ -53,10 +53,12 @@ const RainDrop = ({ precipIntensity, units, id }) => {
 export default RainDrop;
 
 Drop.propTypes = {
-  volume: PropTypes.string.isRequired
+  volume: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired
 };
 
 RainDrop.propTypes = {
   precipIntensity: PropTypes.number.isRequired,
-  units: PropTypes.string.isRequired
+  units: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired
 };
