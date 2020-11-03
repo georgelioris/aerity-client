@@ -19,6 +19,7 @@ export const setwData = (value) => ({
 
 export const getLocation = (dispatch, axios) => ({ clearCache, useGPS }) => {
   if (clearCache) localStorage.removeItem('cached');
+  dispatch(setLoading(true));
   if (useGPS) {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -96,5 +97,6 @@ export const onGeoLocationChange = (dispatch) => (fetchData, geoLoc) => {
 
   if (localData && !isExpired(localData.ts)) {
     dispatch(setwData(JSON.parse(localData.data)));
+    dispatch(setLoading(false));
   } else if (geoLoc) fetchData(geoLoc);
 };
