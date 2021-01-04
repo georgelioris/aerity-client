@@ -13,7 +13,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "grommet": "^2.15.2",
     "grommet-icons": "^4.5.0",
     "grommet-styles": "^0.2.0",
